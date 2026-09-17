@@ -3,28 +3,36 @@ services:
     image: decolua/9router:latest
     container_name: 9router
     restart: always
-    ports:
-      - "20128:20128"
     volumes:
-      - 9router-data:/app/data
-    env_file:
-      - .env
+    - 9router-data:/app/data
     environment:
       DATA_DIR: /app/data
       PORT: "20128"
       HOSTNAME: "0.0.0.0"
       NODE_ENV: production
       HEADROOM_URL: http://headroom:8787
+      JWT_SECRET: ${JWT_SECRET}
+      INITIAL_PASSWORD: ${INITIAL_PASSWORD}
+      API_KEY_SECRET: ${API_KEY_SECRET}
+      MACHINE_ID_SALT: ${MACHINE_ID_SALT}
+      ENABLE_REQUEST_LOGS: ${ENABLE_REQUEST_LOGS}
+      OBSERVABILITY_ENABLED: ${OBSERVABILITY_ENABLED}
+      AUTH_COOKIE_SECURE: ${AUTH_COOKIE_SECURE}
+      REQUIRE_API_KEY: ${REQUIRE_API_KEY}
+      BASE_URL: ${BASE_URL}
+      CLOUD_URL: ${CLOUD_URL}
+      NEXT_PUBLIC_BASE_URL: ${NEXT_PUBLIC_BASE_URL}
+      NEXT_PUBLIC_CLOUD_URL: ${NEXT_PUBLIC_CLOUD_URL}
     depends_on:
-      - headroom
-
+    - headroom
+    expose:
+    - "20128"
   headroom:
     image: ghcr.io/chopratejas/headroom:latest
     container_name: headroom
     restart: always
-    ports:
-      - "8787:8787"
-
+    expose:
+    - "8787"
 volumes:
   9router-data:
     name: 9router-data
